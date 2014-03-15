@@ -30,6 +30,8 @@ namespace GUIv21 {
 			//
 		}
 
+
+
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.
@@ -55,7 +57,12 @@ namespace GUIv21 {
 	private: System::Windows::Forms::ToolStripMenuItem^  aideToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  quitterToolStripMenuItem;
 	private: System::Windows::Forms::ComboBox^  comboBox1;
+
+	private: System::Windows::Forms::Button^  button6;
+	private: System::Windows::Forms::Panel^  panel1;
 	private: System::Windows::Forms::TrackBar^  trackBar1;
+
+
 	private: System::ComponentModel::IContainer^  components;
 	protected: 
 
@@ -86,6 +93,8 @@ namespace GUIv21 {
 			this->aideToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->quitterToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
+			this->button6 = (gcnew System::Windows::Forms::Button());
+			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->trackBar1))->BeginInit();
@@ -185,6 +194,7 @@ namespace GUIv21 {
 			this->quitterToolStripMenuItem->Name = L"quitterToolStripMenuItem";
 			this->quitterToolStripMenuItem->Size = System::Drawing::Size(56, 20);
 			this->quitterToolStripMenuItem->Text = L"Quitter";
+			this->quitterToolStripMenuItem->Click += gcnew System::EventHandler(this, &Form1::quitterToolStripMenuItem_Click);
 			// 
 			// comboBox1
 			// 
@@ -195,12 +205,30 @@ namespace GUIv21 {
 			this->comboBox1->Size = System::Drawing::Size(121, 21);
 			this->comboBox1->TabIndex = 8;
 			// 
+			// button6
+			// 
+			this->button6->Location = System::Drawing::Point(223, 76);
+			this->button6->Name = L"button6";
+			this->button6->Size = System::Drawing::Size(90, 23);
+			this->button6->TabIndex = 10;
+			this->button6->Text = L"Déconnecter";
+			this->button6->UseVisualStyleBackColor = true;
+			this->button6->Click += gcnew System::EventHandler(this, &Form1::button6_Click);
+			// 
+			// panel1
+			// 
+			this->panel1->BackColor = System::Drawing::Color::Red;
+			this->panel1->Location = System::Drawing::Point(319, 76);
+			this->panel1->Name = L"panel1";
+			this->panel1->Size = System::Drawing::Size(27, 23);
+			this->panel1->TabIndex = 11;
+			// 
 			// trackBar1
 			// 
-			this->trackBar1->Location = System::Drawing::Point(13, 150);
+			this->trackBar1->Location = System::Drawing::Point(13, 171);
 			this->trackBar1->Name = L"trackBar1";
-			this->trackBar1->Size = System::Drawing::Size(221, 45);
-			this->trackBar1->TabIndex = 9;
+			this->trackBar1->Size = System::Drawing::Size(271, 45);
+			this->trackBar1->TabIndex = 12;
 			// 
 			// Form1
 			// 
@@ -208,6 +236,8 @@ namespace GUIv21 {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(523, 423);
 			this->Controls->Add(this->trackBar1);
+			this->Controls->Add(this->panel1);
+			this->Controls->Add(this->button6);
 			this->Controls->Add(this->comboBox1);
 			this->Controls->Add(this->menuStrip1);
 			this->Controls->Add(this->label1);
@@ -217,9 +247,11 @@ namespace GUIv21 {
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
+			this->KeyPreview = true;
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"Form1";
 			this->Text = L"WifiBot Graphical Interface";
+			this->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &Form1::Form1_KeyDown);
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->trackBar1))->EndInit();
@@ -229,22 +261,45 @@ namespace GUIv21 {
 		}
 #pragma endregion
 	private: System::Void aideToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-				 MessageBox::Show("Ceci ne vous aide pas beaucoup");
+				 MessageBox::Show("Ceci ne vous aide pas beaucoup"); // Aide
 			 }
 private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
 
+	// Choix De la connexion
 	if (comboBox1->SelectedIndex != -1)
 	{
-		if (comboBox1->SelectedItem == "Simulateur")
+		if (comboBox1->SelectedItem == "Simulateur")// Partie Simulateur
 			MessageBox::Show("Simulator !");
-		if (comboBox1->SelectedItem == "Wifibot")
+			panel1->BackColor = System::Drawing::Color::Green;
+
+		if (comboBox1->SelectedItem == "Wifibot")// Partie Wifibot
 			MessageBox::Show("Wifibator !");
+			panel1->BackColor = System::Drawing::Color::Green;
 	}
 	else
 	{
-		MessageBox::Show("Selectionnez une option valide");
+		MessageBox::Show("Selectionnez une option valide");// Message D'erreur
 	}
 			 
+		 }
+private: System::Void quitterToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+			 Close(); // Quiter le GUI
+		 }
+private: System::Void button6_Click(System::Object^  sender, System::EventArgs^  e) {
+			 // Déconnexion
+			 panel1->BackColor = System::Drawing::Color::Red;
+		 }
+
+
+
+
+private: System::Void Form1_KeyDown(System::Object^  sender, System::Windows::Forms::KeyEventArgs^  e) {
+		
+		if ((e->KeyCode == Keys::A))// Ne pas oublier de mettre la propriété KeyPreview de la form a "true"
+		{
+			panel1->BackColor = System::Drawing::Color::Blue;
+			MessageBox::Show("Touche A activée");
+		}
 		 }
 };
 }
